@@ -17,7 +17,9 @@ resource "google_compute_instance" "default" {
 	metadata {
 		 sshKeys = "svmikhailov:${file("~/.ssh/id_rsa.pub")}"
 	}
-	metadata_startup_script = "sudo apt-get update"
+
+	metadata_startup_script = "curl https://raw.githubusercontent.com/newrushbolt/simpleDeploy/post-install-script/gcp/post_install.sh -o post_install.sh&&sudo bash post_install.sh"
+
 	network_interface {
 			network = "default"
 			access_config {
