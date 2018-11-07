@@ -14,4 +14,3 @@
 ## remove.sh
 
 Запускает `terrafrom destroy` для всех проектов.   
-

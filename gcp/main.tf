@@ -1,21 +1,22 @@
 provider "google" {
-	project     = "genial-reporter-220618"
-	region      = "europe-west1"
+	project     = "${var.google_vars["project_id"]}"
+	region      = "${var.google_vars["region"]}"
 }
 
 resource "google_compute_instance" "default" {
-	name         = "test1-compute-west"
+	count 			 = "${var.google_vars["node_count"]}"
+	name				 = "docker-${count.index}"
 	machine_type = "f1-micro"
-	zone         = "europe-west1-b"
+	zone				 = "${var.google_vars["region"]}-${var.google_vars["zone"]}"
 
 	boot_disk {
 			initialize_params {
-				image = "ubuntu-os-cloud/ubuntu-minimal-1804-lts"
+				image = "${var.google_vars["host_image"]}"
 			}
 	}
 
 	metadata {
-		 sshKeys = "svmikhailov:${file("~/.ssh/id_rsa.pub")}"
+		sshKeys = "${var.google_vars["ssh_keys"]}"
 	}
 
 	metadata_startup_script = "curl https://raw.githubusercontent.com/newrushbolt/simpleDeploy/master/gcp/post_install.sh -o post_install.sh&&sudo bash post_install.sh"
@@ -26,3 +27,13 @@ resource "google_compute_instance" "default" {
 			}
 	}
 }
+
+resource "google_dns_record_set" "dns" {
+	count 			 = "${var.google_vars["node_count"]}"
+	managed_zone = "${var.google_vars["dns_zone_id"]}"
+	name 				 = "docker-${count.index}.${var.google_vars["project_id"]}.${var.google_vars["dns_zone_fqdn"]}"
+	type 				 = "A"
+	ttl 				 = 300
+	rrdatas			 = ["${element(google_compute_instance.default.*.network_interface.0.access_config.0.nat_ip, count.index)}"]
+}
+

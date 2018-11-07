@@ -12,3 +12,5 @@ else
 	echo "Apply FAIL"
 	exit 1
 fi
+
+ansible -i main.gcp.yml --list-hosts all

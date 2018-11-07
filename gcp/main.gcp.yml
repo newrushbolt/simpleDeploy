@@ -1,7 +1,7 @@
 ---
 
 plugin: gcp_compute
-zones: # populate inventory with instances in these regions
+zones:
   - europe-west1-b
 projects:
   - genial-reporter-220618
@@ -10,3 +10,5 @@ auth_kind: serviceaccount
 service_account_file: /home/svmikhailov/.ssh/d0645f000670.json
 scopes:
   - https://www.googleapis.com/auth/compute
+hostnames:
+  - name
