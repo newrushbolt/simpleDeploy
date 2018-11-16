@@ -1,11 +1,14 @@
 #!/bin/bash
 
-. utils/color.sh
+. utils/lib.sh
 . projects.sh
 
+prepare_tmp_dir
+
 for project in $gcp_projects_list; do
+	prepare_gcp_vars $project
 	echo -e "\nRunning tests for GCP project:\t\t$gcp_projects_list"
-	test_result="$(utils/gcp_common_test.sh $project)" 
+	test_result="$(utils/gcp_common_test.sh $project|tee -a ".tmp/$project/gcp_common_test.log")"
 	if [[ $? -eq 0 ]];then
 		echo_green "PASS"
 	else
@@ -15,8 +18,9 @@ for project in $gcp_projects_list; do
 done
 
 for project in $gcp_projects_list; do
+	prepare_gcp_vars $project
 	echo -e "\nDeploing GCP project:\t\t$gcp_projects_list"
-	utils/gcp_deploy.sh $project
+	deploy_result="$(utils/gcp_deploy.sh $project|tee -a ".tmp/$project/gcp_deploy.log")"
 	if [[ $? -eq 0 ]];then
 		echo_green "SUCCESSED"
 	else

@@ -3,6 +3,7 @@
 plugin: gcp_compute
 zones:
   - europe-west1-b
+  - asia-east1-a
 projects:
   - genial-reporter-220618
 filters:
