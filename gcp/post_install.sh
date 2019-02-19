@@ -1,11 +1,27 @@
 #!/bin/bash
 
-apt-get update&& \
-apt-get -y install nano mc&& \
-apt-get -y install python3&& \
-ln -s /usr/bin/python3 /usr/bin/python&& \
-ln -s /usr/bin/pip3 /usr/bin/pip&& \
-apt-get -y install docker.io&& \
-apt-get -y install docker-compose&& \
-systemctl enable docker&& \
-systemctl start docker
+yum install -y \
+	epel-release \
+	https://centos7.iuscommunity.org/ius-release.rpm
+
+yum update -y
+
+yum install -y \
+	curl \
+	iftop \
+	iotop \
+	libselinux-python \
+	lsof \
+	net-tools \
+	ntp \
+	python2-pip \
+	python36u \
+	python36u-pip \
+	rsync \
+	strace \
+	sysstat \
+	tcpdump \
+	telnet \
+	traceroute \
+	unzip \
+	yum
